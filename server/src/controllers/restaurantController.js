@@ -433,6 +433,34 @@ const popularRestaurant = async (req, res) => {
 }
 
 
+/* ======================================================
+   GET All RESTAURANTS Details of restaurant
+====================================================== */
+
+const getRestaurantsDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const restaurant = await Restaurant.findById(id);
+        if (!restaurant) {
+            return res.status(404).json({
+                message: "Restaurant not found",
+            });
+        }
+        const foods = await Food.find({
+            restaurant: id,
+        })
+            .select("name price image restaurant")
+            .populate("restaurant", "name deliveryTime address");
+
+        return res.status(200).json(foods);
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+}
+
 
 module.exports = {
     registerRestaurant,
@@ -442,5 +470,6 @@ module.exports = {
     restaurantSettings,
     restaurantUpdateSettings,
     popularRestaurant,
+    getRestaurantsDetails,
     getRestaurants,
 };

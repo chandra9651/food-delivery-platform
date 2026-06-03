@@ -8,6 +8,7 @@ const {
     restaurantSettings,
     restaurantUpdateSettings,
     popularRestaurant,
+    getRestaurantsDetails,
     getRestaurants,
 } = require("../controllers/restaurantController");
 
@@ -35,6 +36,7 @@ router.put("/update-profile", upload.single("image"), restaurantUpdateProfile);
 
 router.get("/settings", restaurantSettings);
 router.put("/:id", restaurantUpdateSettings);
+router.get("/:id", getRestaurantsDetails);
 router.get("/popular", popularRestaurant);
 router.get("/", getRestaurants);
 

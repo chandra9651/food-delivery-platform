@@ -1,5 +1,9 @@
 // src/publicApp/pages/RestaurantDetails.jsx
 
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import API from "../../api/axios";
+
 import {
     FaStar,
     FaClock,
@@ -46,6 +50,44 @@ const foods = [
 ];
 
 const RestaurantDetails = () => {
+    const [restaurant, setRestaurant] = useState({});
+    const [foods, setFoods] = useState([]);
+    const { id } = useParams();
+    useEffect(() => {
+        const fetchFood = async () => {
+            try {
+                const { data } = await API.get(`/restaurants/${id}`);
+
+                const updatedFoods = data.map((food) => ({
+                    ...food,
+                    image: `${import.meta.env.VITE_SERVER_URL}${food.image}`,
+                    rating: 4.6,
+                    restaurant: {
+                        ...food.restaurant,
+                        rating: 4.5,
+                    },
+                }));
+
+                setFoods(updatedFoods);
+
+                if (updatedFoods.length > 0) {
+                    setRestaurant(updatedFoods[0].restaurant);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchFood();
+    }, [id]);
+
+    useEffect(() => {
+        console.log("Restaurant Updated:", restaurant);
+    }, [restaurant]);
+
+    console.log(restaurant);
+
     return (
         <div className="bg-gray-50 min-h-screen">
 
@@ -74,7 +116,7 @@ const RestaurantDetails = () => {
                     <div className="max-w-6xl mx-auto">
 
                         <h1 className="text-4xl lg:text-5xl font-extrabold">
-                            Burger House
+                            {restaurant?.name || "Loading..."}
                         </h1>
 
                         <p className="mt-4 text-lg text-gray-200 max-w-2xl">
@@ -92,7 +134,7 @@ const RestaurantDetails = () => {
                                 <FaStar className="text-yellow-400" />
 
                                 <span className="font-semibold">
-                                    4.8 Rating
+                                    {restaurant?.rating || "Loading..."}
                                 </span>
                             </div>
 
@@ -101,7 +143,7 @@ const RestaurantDetails = () => {
                                 <FaClock className="text-orange-400" />
 
                                 <span>
-                                    30-40 min
+                                    {restaurant?.deliveryTime + "-" + (restaurant?.deliveryTime + 5) || "Loading..."}
                                 </span>
                             </div>
 
@@ -110,7 +152,7 @@ const RestaurantDetails = () => {
                                 <FaMapMarkerAlt className="text-red-400" />
 
                                 <span>
-                                    Prayagraj, India
+                                    {restaurant?.address}
                                 </span>
                             </div>
                         </div>
@@ -169,7 +211,7 @@ const RestaurantDetails = () => {
 
                     {foods.map((food) => (
                         <div
-                            key={food.id}
+                            key={food._id}
                             className="
                 bg-white rounded-3xl
                 overflow-hidden shadow-sm
