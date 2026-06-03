@@ -421,8 +421,9 @@ const getRestaurants = async (req, res) => {
 const popularRestaurant = async (req, res) => {
 
     try {
+        console.log("popular restaurnt");
         const restaurants = await Restaurant.find().select(
-            "_id name image deliveryTime"
+            "name image deliveryTime"
         );
 
         return res.status(200).json(restaurants);

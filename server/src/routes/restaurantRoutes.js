@@ -35,9 +35,9 @@ router.get("/profile", restaurantProfile);
 router.put("/update-profile", upload.single("image"), restaurantUpdateProfile);
 
 router.get("/settings", restaurantSettings);
+router.get("/popular", popularRestaurant);
 router.put("/:id", restaurantUpdateSettings);
 router.get("/:id", getRestaurantsDetails);
-router.get("/popular", popularRestaurant);
 router.get("/", getRestaurants);
 
 
