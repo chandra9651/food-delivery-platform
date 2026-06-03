@@ -19,6 +19,7 @@ const Navbar = () => {
 
     const [profileImage, setProfileImage] = useState('https://i.pravatar.cc/150?img=12');
     const [address, setAddress] = useState("");
+    const [cart, setCart] = useState(0);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -121,10 +122,11 @@ const Navbar = () => {
 
                                 <FaShoppingCart className="text-lg" />
                             </div>
-
-                            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                                2
-                            </span>
+                            {cart !== 0 ? (
+                                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                                    {cart}
+                                </span>
+                            ) : null}
                         </NavLink>
                         <NavLink to="/user" className="relative">
                             {/* PROFILE */}
