@@ -1,5 +1,7 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+    getProfile,
+} from "../../../services/authService"
 
 import {
     FaShoppingCart,
@@ -13,6 +15,27 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
 
     const [mobileMenu, setMobileMenu] = useState(false);
+
+
+    const [profileImage, setProfileImage] = useState('https://i.pravatar.cc/150?img=12');
+    const [address, setAddress] = useState("");
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                console.log("before");
+                const data = await getProfile();
+                setProfileImage(`${import.meta.env.VITE_SERVER_URL}${data.profileImage}`);
+                setAddress(data.address);
+                console.log("profileImage")
+                console.log(data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchProfile();
+    }, []);
+
 
     // reusable active style
     const navClass = ({ isActive }) =>
@@ -87,7 +110,7 @@ const Navbar = () => {
                             <FaMapMarkerAlt className="text-orange-500" />
 
                             <span className="text-sm font-semibold text-gray-700">
-                                Prayagraj, India
+                                {address || "Your Address"}
                             </span>
                         </div>
 
@@ -106,7 +129,7 @@ const Navbar = () => {
                         <NavLink to="/user" className="relative">
                             {/* PROFILE */}
                             <img
-                                src="https://i.pravatar.cc/150?img=12"
+                                src={profileImage}
                                 alt="profile"
                                 className="w-11 h-11 rounded-full object-cover border-2 border-orange-500 cursor-pointer"
                             />
